@@ -8,6 +8,7 @@
 @import './components/editor.scss';
 @import './components/toast.scss';
 
+/* Reset and base styles */
 html,
 body {
   height: 100%;
@@ -15,6 +16,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* Prevent flash of unstyled content */
@@ -26,7 +28,26 @@ html.loaded {
   visibility: visible;
 }
 
-/* Smooth loading animation */
+/* Root container */
+#root {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Loading states */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bolt-elements-background-depth-1);
+  z-index: 9999;
+}
+
 .loading-fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -34,43 +55,107 @@ html.loaded {
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Mobile optimizations */
+/* Smooth transitions */
+* {
+  box-sizing: border-box;
+}
+
+/* Focus styles */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--bolt-elements-borderColorActive);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bolt-elements-background-depth-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bolt-elements-borderColor);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bolt-elements-textTertiary);
+}
+
+/* Mobile scrollbar hiding */
 @media (max-width: 768px) {
-  /* Prevent zoom on input focus */
+  ::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
+
+/* Text selection */
+::selection {
+  background: var(--bolt-elements-borderColorActive);
+  color: var(--bolt-elements-textPrimary);
+}
+
+/* Prevent zoom on iOS */
+@media screen and (max-width: 768px) {
   input[type="text"],
   input[type="email"],
   input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
   textarea,
   select {
     font-size: 16px !important;
-  }
-
-  /* Better touch targets */
-  button,
-  .button,
-  [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  /* Smooth scrolling */
-  * {
-    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0);
   }
 }
 
-/* High DPI displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  /* Crisp images and icons */
-  img,
-  svg {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-color: ButtonText !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
 }

@@ -43,7 +43,7 @@ export const MobileChatMessages = memo(({
             <button
               key={index}
               onClick={() => onExampleClick(prompt.text)}
-              className="w-full p-4 text-left bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 rounded-lg border border-bolt-elements-borderColor transition-colors text-sm text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary"
+              className="w-full p-4 text-left bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 rounded-lg border border-bolt-elements-borderColor transition-colors text-sm text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary min-h-[48px] touch-manipulation"
             >
               {prompt.text}
             </button>

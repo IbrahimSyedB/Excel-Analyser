@@ -10,16 +10,29 @@ export function themeIsDark() {
 
 export const DEFAULT_THEME = 'light';
 
-let initialTheme = DEFAULT_THEME;
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') {
+    return DEFAULT_THEME;
+  }
 
-// Only access localStorage on client side
-if (typeof window !== 'undefined') {
-  const persistedTheme = localStorage.getItem(kTheme) as Theme | undefined;
-  const themeAttribute = document.querySelector('html')?.getAttribute('data-theme');
-  initialTheme = persistedTheme ?? (themeAttribute as Theme) ?? DEFAULT_THEME;
+  try {
+    const persistedTheme = localStorage.getItem(kTheme) as Theme | undefined;
+    if (persistedTheme && (persistedTheme === 'dark' || persistedTheme === 'light')) {
+      return persistedTheme;
+    }
+
+    const themeAttribute = document.documentElement.getAttribute('data-theme') as Theme | null;
+    if (themeAttribute && (themeAttribute === 'dark' || themeAttribute === 'light')) {
+      return themeAttribute;
+    }
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  } catch (e) {
+    return DEFAULT_THEME;
+  }
 }
 
-export const themeStore = atom<Theme>(initialTheme);
+export const themeStore = atom<Theme>(getInitialTheme());
 
 export function toggleTheme() {
   const currentTheme = themeStore.get();
@@ -28,7 +41,11 @@ export function toggleTheme() {
   themeStore.set(newTheme);
 
   if (typeof window !== 'undefined') {
-    localStorage.setItem(kTheme, newTheme);
-    document.querySelector('html')?.setAttribute('data-theme', newTheme);
+    try {
+      localStorage.setItem(kTheme, newTheme);
+      document.documentElement.setAttribute('data-theme', newTheme);
+    } catch (e) {
+      console.warn('Failed to persist theme:', e);
+    }
   }
 }

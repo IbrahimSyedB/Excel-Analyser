@@ -29,7 +29,7 @@ export const MobileWorkbenchTabs = memo(({
           onClick={() => !tab.disabled && onTabChange(tab.id)}
           disabled={tab.disabled}
           className={classNames(
-            'flex-1 flex items-center justify-center space-x-2 py-3 px-4 text-sm font-medium transition-colors',
+            'flex-1 flex items-center justify-center space-x-2 py-3 px-4 text-sm font-medium transition-colors min-h-[48px] touch-manipulation',
             {
               'bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary border-b-2 border-accent-500': 
                 activeTab === tab.id,

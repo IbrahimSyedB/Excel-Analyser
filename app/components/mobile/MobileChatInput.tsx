@@ -26,11 +26,11 @@ export const MobileChatInput = memo(forwardRef<HTMLTextAreaElement, MobileChatIn
     };
 
     return (
-      <div className="p-4 bg-bolt-elements-background-depth-2 border-t border-bolt-elements-borderColor">
+      <div className="p-4 bg-bolt-elements-background-depth-2 border-t border-bolt-elements-borderColor safe-area-inset-bottom">
         <div className="bg-bolt-elements-prompt-background border border-bolt-elements-borderColor rounded-lg overflow-hidden">
           <textarea
             ref={ref}
-            className="w-full p-4 bg-transparent text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary resize-none focus:outline-none"
+            className="w-full p-4 bg-transparent text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary resize-none focus:outline-none text-base"
             placeholder="How can Bolt help you today?"
             value={input}
             onChange={onInputChange}
@@ -44,7 +44,7 @@ export const MobileChatInput = memo(forwardRef<HTMLTextAreaElement, MobileChatIn
               disabled={input.length === 0 || enhancingPrompt}
               onClick={onEnhance}
               className={classNames(
-                'flex items-center space-x-2 px-3 py-2 rounded-md text-sm transition-colors',
+                'flex items-center space-x-2 px-3 py-2 rounded-md text-sm transition-colors min-h-[44px] touch-manipulation',
                 {
                   'bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text hover:bg-bolt-elements-button-secondary-backgroundHover': 
                     !promptEnhanced && !enhancingPrompt,
@@ -71,7 +71,7 @@ export const MobileChatInput = memo(forwardRef<HTMLTextAreaElement, MobileChatIn
               onClick={isStreaming ? onStop : onSend}
               disabled={!isStreaming && input.length === 0}
               className={classNames(
-                'flex items-center justify-center w-12 h-12 rounded-full transition-colors',
+                'flex items-center justify-center w-12 h-12 rounded-full transition-colors touch-manipulation',
                 {
                   'bg-accent-500 hover:bg-accent-600 text-white': input.length > 0 || isStreaming,
                   'bg-bolt-elements-background-depth-3 text-bolt-elements-textTertiary cursor-not-allowed': 

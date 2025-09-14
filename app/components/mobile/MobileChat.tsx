@@ -16,16 +16,8 @@ const logger = createScopedLogger('MobileChat');
 
 export const MobileChat = memo(() => {
   const { ready, initialMessages, storeMessageHistory } = useChatHistory();
-  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    if (ready) {
-      const timer = setTimeout(() => setIsReady(true), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [ready]);
-
-  if (!ready || !isReady) {
+  if (!ready) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-500"></div>
@@ -46,7 +38,6 @@ const MobileChatImpl = memo(({ initialMessages, storeMessageHistory }: MobileCha
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const [chatStarted, setChatStarted] = useState(initialMessages.length > 0);
-  const { showChat } = useStore(chatStore);
 
   const { messages, isLoading, input, handleInputChange, setInput, stop, append } = useChat({
     api: '/api/chat',
@@ -76,7 +67,6 @@ const MobileChatImpl = memo(({ initialMessages, storeMessageHistory }: MobileCha
   }, [messages, isLoading, parseMessages]);
 
   useEffect(() => {
-    // Auto-scroll to bottom on new messages
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }

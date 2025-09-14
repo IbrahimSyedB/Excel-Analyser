@@ -3,22 +3,27 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Touch-friendly button sizes */
+.safe-area-inset-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Touch-friendly interactions */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile optimizations */
 @media (max-width: 768px) {
+  /* Touch-friendly button sizes */
   button {
     min-height: 44px;
     min-width: 44px;
   }
 
-  /* Larger tap targets for mobile */
-  .mobile-tap-target {
-    min-height: 48px;
-    min-width: 48px;
-  }
-
   /* Prevent zoom on input focus */
   input, textarea, select {
-    font-size: 16px;
+    font-size: 16px !important;
   }
 
   /* Smooth scrolling for mobile */
@@ -29,6 +34,8 @@
   /* Hide scrollbars on mobile */
   ::-webkit-scrollbar {
     display: none;
+    width: 0;
+    height: 0;
   }
 
   /* Prevent text selection on UI elements */
@@ -37,6 +44,17 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+
+  /* Better tap targets */
+  .mobile-tap-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Prevent pull-to-refresh */
+  body {
+    overscroll-behavior-y: contain;
   }
 }
 
@@ -51,9 +69,40 @@
 /* Prevent horizontal scroll */
 html, body {
   overflow-x: hidden;
+  position: relative;
 }
 
 /* Smooth transitions */
 .transition-smooth {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific styles */
+  .ios-fix {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  
+  /* Fix for iOS viewport units */
+  .h-screen {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+}
+
+/* Android specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select {
+    background-image: none;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  img, svg {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
 }

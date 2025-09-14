@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { classNames } from '~/utils/classNames';
-import type { MobileView } from './MobileApp.client';
+import type { MobileView } from './MobileLayout';
 
 interface MobileBottomNavProps {
   activeView: MobileView;
@@ -38,7 +38,7 @@ export const MobileBottomNav = memo(({
           onClick={() => item.enabled && onViewChange(item.id)}
           disabled={!item.enabled}
           className={classNames(
-            'flex-1 flex flex-col items-center justify-center py-3 px-4 min-h-[60px] transition-colors',
+            'flex-1 flex flex-col items-center justify-center py-3 px-4 min-h-[60px] transition-colors touch-manipulation',
             {
               'text-accent-500 bg-bolt-elements-item-backgroundAccent': 
                 activeView === item.id && item.enabled,

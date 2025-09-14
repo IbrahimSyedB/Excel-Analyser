@@ -39,57 +39,56 @@ export const links: LinksFunction = () => [
 ];
 
 const inlineThemeCode = stripIndents`
-  setTutorialKitTheme();
-
-  function setTutorialKitTheme() {
-    let theme = localStorage.getItem('bolt_theme');
-
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  (function() {
+    try {
+      const theme = localStorage.getItem('bolt_theme') || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.visibility = 'visible';
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.style.visibility = 'visible';
     }
-
-    document.querySelector('html')?.setAttribute('data-theme', theme);
-  }
+  })();
 `;
 
 export const Head = createHead(() => (
   <>
     <meta charSet="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1488FC" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <Meta />
     <Links />
     <script dangerouslySetInnerHTML={{ __html: inlineThemeCode }} />
+    <style dangerouslySetInnerHTML={{ 
+      __html: `
+        html { visibility: hidden; }
+        html.loaded { visibility: visible; }
+        .loading-screen { 
+          position: fixed; 
+          inset: 0; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          background: var(--bolt-elements-background-depth-1, #ffffff);
+          z-index: 9999;
+        }
+      `
+    }} />
   </>
 ));
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const theme = useStore(themeStore);
-  const [mounted, setMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    document.querySelector('html')?.setAttribute('data-theme', theme);
+    setIsHydrated(true);
+    document.documentElement.classList.add('loaded');
+    document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
-
-  // Prevent flash of unstyled content
-  if (!mounted) {
-    return (
-      <html lang="en" data-theme={theme}>
-        <head>
-          <Head />
-        </head>
-        <body>
-          <div id="root" className="w-full h-full bg-bolt-elements-background-depth-1">
-            <div className="flex items-center justify-center h-screen">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-500"></div>
-            </div>
-          </div>
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-      </html>
-    );
-  }
 
   return (
     <html lang="en" data-theme={theme}>
@@ -98,6 +97,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <div id="root" className="w-full h-full">
+          {!isHydrated && (
+            <div className="loading-screen">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-500"></div>
+            </div>
+          )}
           {children}
         </div>
         <ScrollRestoration />

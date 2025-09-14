@@ -11,7 +11,6 @@ export const MobileFileTree = memo(() => {
 
   const handleFileSelect = (filePath: string) => {
     workbenchStore.setSelectedFile(filePath);
-    // Could add navigation to editor view here if needed
   };
 
   if (Object.keys(files).length === 0) {
@@ -38,7 +37,7 @@ export const MobileFileTree = memo(() => {
           rootFolder={WORK_DIR}
           hideRoot
           unsavedFiles={unsavedFiles}
-          className="text-base" // Larger text for mobile
+          className="text-base"
         />
       </div>
     </div>

@@ -9,6 +9,25 @@ export default defineConfig((config) => {
   return {
     build: {
       target: 'esnext',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom'],
+            ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+            editor: ['@codemirror/state', '@codemirror/view'],
+            terminal: ['@xterm/xterm', '@xterm/addon-fit'],
+          },
+        },
+      },
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        '@remix-run/react',
+        'nanostores',
+        '@nanostores/react',
+      ],
     },
     plugins: [
       nodePolyfills({
@@ -26,7 +45,7 @@ export default defineConfig((config) => {
       tsconfigPaths(),
       chrome129IssuePlugin(),
       config.mode === 'production' && optimizeCssModules({ apply: 'build' }),
-    ],
+    ].filter(Boolean),
   };
 });
 

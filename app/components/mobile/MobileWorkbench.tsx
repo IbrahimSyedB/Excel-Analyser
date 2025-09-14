@@ -8,12 +8,8 @@ import { MobileTerminal } from './MobileTerminal';
 
 export type MobileWorkbenchTab = 'preview' | 'files' | 'terminal';
 
-interface MobileWorkbenchProps {
-  activeTab: MobileWorkbenchTab;
-}
-
-export const MobileWorkbench = memo(({ activeTab: initialTab }: MobileWorkbenchProps) => {
-  const [activeTab, setActiveTab] = useState<MobileWorkbenchTab>(initialTab);
+export const MobileWorkbench = memo(() => {
+  const [activeTab, setActiveTab] = useState<MobileWorkbenchTab>('preview');
   const files = useStore(workbenchStore.files);
   const previews = useStore(workbenchStore.previews);
 

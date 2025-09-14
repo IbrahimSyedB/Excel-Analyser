@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { memo, useState, useRef } from 'react';
+import { memo, useState, useRef, useEffect } from 'react';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { classNames } from '~/utils/classNames';
 
@@ -12,7 +12,7 @@ export const MobilePreview = memo(() => {
 
   const activePreview = previews[activePreviewIndex];
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!activePreview) {
       setUrl('');
       setIframeUrl(undefined);
@@ -46,11 +46,10 @@ export const MobilePreview = memo(() => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Preview Controls */}
       <div className="flex items-center p-3 bg-bolt-elements-background-depth-2 border-b border-bolt-elements-borderColor space-x-3">
         <button
           onClick={reloadPreview}
-          className="p-2 rounded-md bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text hover:bg-bolt-elements-button-secondary-backgroundHover transition-colors"
+          className="p-2 rounded-md bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text hover:bg-bolt-elements-button-secondary-backgroundHover transition-colors min-h-[44px] min-w-[44px] touch-manipulation"
         >
           <div className="i-ph:arrow-clockwise text-lg" />
         </button>
@@ -73,7 +72,7 @@ export const MobilePreview = memo(() => {
           <select
             value={activePreviewIndex}
             onChange={(e) => setActivePreviewIndex(Number(e.target.value))}
-            className="px-3 py-2 bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text rounded-md border border-bolt-elements-borderColor text-sm"
+            className="px-3 py-2 bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text rounded-md border border-bolt-elements-borderColor text-sm min-h-[44px] touch-manipulation"
           >
             {previews.map((preview, index) => (
               <option key={preview.port} value={index}>
@@ -84,7 +83,6 @@ export const MobilePreview = memo(() => {
         )}
       </div>
 
-      {/* Preview Content */}
       <div className="flex-1">
         {activePreview ? (
           <iframe
